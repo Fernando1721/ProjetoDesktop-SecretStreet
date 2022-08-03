@@ -5,12 +5,18 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import model.DAO;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
 
 public class Login extends JFrame {
 
@@ -42,6 +48,12 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {	
+				status();
+			}
+		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/img/computer.png")));
 		setResizable(false);
 		setTitle("InfoRs - Login");
@@ -77,9 +89,36 @@ public class Login extends JFrame {
 		btnEntrar.setBounds(181, 205, 89, 23);
 		contentPane.add(btnEntrar);
 		
-		JLabel lblStatus = new JLabel("");
-		lblStatus.setIcon(new ImageIcon(Login.class.getResource("/img/bddoff.png")));
-		lblStatus.setBounds(376, 227, 48, 48);
+		lblStatus = new JLabel("");
+		lblStatus.setIcon(new ImageIcon(Login.class.getResource("/img/databaseoff.png")));
+		lblStatus.setBounds(360, 211, 64, 64);
 		contentPane.add(lblStatus);
 	}// Fim do construtor
-}
+	
+		// Criação de um objeto para acessar a camada model
+		DAO dao = new DAO();
+		private JLabel lblStatus;
+	
+		/**
+		 * Método usado para verificar o status do servidor
+		 */
+	
+		private void status() {
+			try {
+				// abrir a conexão
+				Connection con = dao.conectar();
+				if (con == null) {
+					// escolher a imagem databaseoff
+					lblStatus.setIcon(new ImageIcon(Login.class.getResource("/img/databaseoff.png")));
+				} else {
+					// escolher a imagem databaseon
+					lblStatus.setIcon(new ImageIcon(Login.class.getResource("/img/databaseon.png")));
+				}
+				// Não esquecer de fechar a conexão
+				con.close();
+			} catch (Exception e) {
+				System.out.println(e);
+			}
+		}
+	
+} // Fim do código
