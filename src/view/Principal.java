@@ -30,7 +30,8 @@ public class Principal extends JFrame {
 	private JPanel contentPane;
 	private final JPanel panel = new JPanel();
 	private JLabel lblData;
-	private JButton Relatorio;
+	private JButton btnNewButton;
+	private JButton btnRelatorios;
 
 	/**
 	 * Launch the application.
@@ -77,7 +78,7 @@ public class Principal extends JFrame {
 		contentPane.add(lblNewLabel);
 		lblNewLabel.setIcon(new ImageIcon(Principal.class.getResource("/img/laptop.png")));
 		
-		JButton btnNewButton = new JButton("");
+		btnNewButton = new JButton("");
 		btnNewButton.setContentAreaFilled(false);
 		btnNewButton.setBorderPainted(false);
 		btnNewButton.addActionListener(new ActionListener() {
@@ -126,10 +127,11 @@ public class Principal extends JFrame {
 		btnNewButton_1_1.setBounds(631, 59, 128, 128);
 		contentPane.add(btnNewButton_1_1);
 		
-		JButton btnNewButton_2 = new JButton("");
-		btnNewButton_2.setContentAreaFilled(false);
-		btnNewButton_2.setBorderPainted(false);
-		btnNewButton_2.addActionListener(new ActionListener() {
+		JButton btnUsuarios = new JButton("");
+		btnUsuarios.setEnabled(false);
+		btnUsuarios.setContentAreaFilled(false);
+		btnUsuarios.setBorderPainted(false);
+		btnUsuarios.addActionListener(new ActionListener() {
 			// Evento clicar no botão
 			public void actionPerformed(ActionEvent e) {
 				// Link para o jDialog
@@ -138,11 +140,11 @@ public class Principal extends JFrame {
 				
 			}
 		});
-		btnNewButton_2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton_2.setIcon(new ImageIcon(Principal.class.getResource("/img/user.png")));
-		btnNewButton_2.setToolTipText("Usu\u00E1rios");
-		btnNewButton_2.setBounds(32, 59, 128, 128);
-		contentPane.add(btnNewButton_2);
+		btnUsuarios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnUsuarios.setIcon(new ImageIcon(Principal.class.getResource("/img/user.png")));
+		btnUsuarios.setToolTipText("Usu\u00E1rios");
+		btnUsuarios.setBounds(32, 59, 128, 128);
+		contentPane.add(btnUsuarios);
 		
 		JButton btnNewButton_3 = new JButton("");
 		btnNewButton_3.setContentAreaFilled(false);
@@ -176,21 +178,22 @@ public class Principal extends JFrame {
 		btnNewButton_4.setBounds(428, 267, 128, 128);
 		contentPane.add(btnNewButton_4);
 		
-		Relatorio = new JButton("");
-		Relatorio.setContentAreaFilled(false);
-		Relatorio.setBorderPainted(false);
-		Relatorio.addActionListener(new ActionListener() {
+		btnRelatorios = new JButton("");
+		btnRelatorios.setEnabled(false);
+		btnRelatorios.setContentAreaFilled(false);
+		btnRelatorios.setBorderPainted(false);
+		btnRelatorios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// Link para o jDialog
 				Relatorios relatorios = new Relatorios();
 				relatorios.setVisible(true);
 			}
 		});
-		Relatorio.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		Relatorio.setIcon(new ImageIcon(Principal.class.getResource("/img/relatorio.png")));
-		Relatorio.setToolTipText("Relat\u00F3rios");
-		Relatorio.setBounds(230, 267, 128, 128);
-		contentPane.add(Relatorio);
+		btnRelatorios.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnRelatorios.setIcon(new ImageIcon(Principal.class.getResource("/img/relatorio.png")));
+		btnRelatorios.setToolTipText("Relat\u00F3rios");
+		btnRelatorios.setBounds(230, 267, 128, 128);
+		contentPane.add(btnRelatorios);
 		
 		JButton btnNewButton_3_1_1 = new JButton("");
 		btnNewButton_3_1_1.setContentAreaFilled(false);
