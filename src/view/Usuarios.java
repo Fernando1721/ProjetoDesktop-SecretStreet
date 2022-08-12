@@ -185,7 +185,6 @@ public class Usuarios extends JDialog {
 		//txtUsuNome
 		RestrictedTextField validarNome = new RestrictedTextField(txtUsuNome);
 		validarNome.setLimit(50);
-		validarNome.setOnlyText(true);
 		//txtUsuLogin
 		RestrictedTextField validarLogin = new RestrictedTextField(txtUsuLogin);
 		validarLogin.setLimit(15);

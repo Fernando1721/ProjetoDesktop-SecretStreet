@@ -1,14 +1,17 @@
 package view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import Atxy2k.CustomTextField.RestrictedTextField;
 import model.DAO;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -17,6 +20,10 @@ import javax.swing.ImageIcon;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
 
@@ -81,11 +88,16 @@ public class Login extends JFrame {
 		txtSenha.setBounds(151, 145, 141, 20);
 		contentPane.add(txtSenha);
 		
-		JLabel lblUsuario = new JLabel("Usu\u00E1rio");
-		lblUsuario.setBounds(88, 78, 53, 14);
+		JLabel lblUsuario = new JLabel("Login");
+		lblUsuario.setBounds(97, 78, 53, 14);
 		contentPane.add(lblUsuario);
 		
 		JButton btnEntrar = new JButton("Entrar");
+		btnEntrar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				logar();
+			}
+		});
 		btnEntrar.setBounds(181, 205, 89, 23);
 		contentPane.add(btnEntrar);
 		
@@ -93,6 +105,13 @@ public class Login extends JFrame {
 		lblStatus.setIcon(new ImageIcon(Login.class.getResource("/img/databaseoff.png")));
 		lblStatus.setBounds(360, 211, 64, 64);
 		contentPane.add(lblStatus);
+		
+		RestrictedTextField validarLogin = new RestrictedTextField(txtLogin);
+		validarLogin.setLimit(15);
+		
+		RestrictedTextField validarSenha = new RestrictedTextField(txtSenha);
+		validarSenha.setLimit(255);
+		
 	}// Fim do construtor
 	
 		// Criação de um objeto para acessar a camada model
@@ -121,4 +140,74 @@ public class Login extends JFrame {
 			}
 		}
 	
+		/**
+		 * Método usado para autenticação de um usuário
+		 */
+		
+		private void logar() {
+			
+			String capturaSenha = new String (txtSenha.getPassword());
+			
+			// validação
+			if (txtLogin.getText().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "Insira o login");
+				txtLogin.requestFocus();
+			} else if (txtSenha.getPassword().length == 0) {
+				JOptionPane.showMessageDialog(null, "Insira a senha");
+				txtSenha.requestFocus();
+			} else {
+				// lógica principal
+				String read = "select * from usuarios where login=? and senha=md5(?)";
+			  try {
+				//Estabelecer a conexão 
+				Connection con = dao.conectar();
+				//Preparar a execução da Query
+				PreparedStatement pst = con.prepareStatement(read);
+				//Setar o argumento (id)
+				//Substituir o ? pelo conteúdo da caixa de texto 
+				pst.setString(1, txtLogin.getText());
+				pst.setString(2, capturaSenha);
+				//Executar a query e exibir o resultado no formulário
+				ResultSet rs = pst.executeQuery();
+				//Validação (existência de usuário)
+				//rs.next() -> existência de usuário
+				if (rs.next()) {
+					// Verificar o perfil do usuário
+					String perfil = rs.getString(5);
+					// System.out.println(perfil);
+					Principal principal = new Principal();
+					if (perfil.equals("admin")) {
+						// abrir a tela principal
+						principal.setVisible(true);
+						// habilitar recursos
+						principal.btnRelatorios.setEnabled(true);
+						principal.btnUsuarios.setEnabled(true);
+						// personalizar
+						principal.panelUsuario.setBackground(Color.RED);
+						// setar o nome do usuario na tela principal
+						principal.lblUsuario.setText("Usuário: " + rs.getString(2));
+						// fechar a tela de login 
+						this.dispose();
+					} else {
+						// abrir a tela principal
+						principal.setVisible(true);
+						// setar o nome do usuario na tela principal
+						principal.lblUsuario.setText("Usuário: " + rs.getString(2));
+						// fechar a tela de login 
+						this.dispose();
+					}
+										
+					// encerrar a conexão
+					con.close();
+					
+				} else {
+					JOptionPane.showMessageDialog(null, "Login e/ou senha inválido(s)");
+				} 
+				
+			  	} catch (Exception e) {
+					System.out.println(e);
+			    } 
+			}
+		}
+		
 } // Fim do código

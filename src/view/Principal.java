@@ -28,10 +28,13 @@ public class Principal extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private final JPanel panel = new JPanel();
+	public final JPanel panelUsuario = new JPanel();
 	private JLabel lblData;
 	private JButton btnNewButton;
-	private JButton btnRelatorios;
+	// atribuir o modificador publico para manipular estes objetos de outra classe
+	public JButton btnRelatorios;
+	public JButton btnUsuarios;
+	public JLabel lblUsuario;
 
 	/**
 	 * Launch the application.
@@ -74,7 +77,7 @@ public class Principal extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(32, 466, 64, 64);
+		lblNewLabel.setBounds(33, 452, 64, 64);
 		contentPane.add(lblNewLabel);
 		lblNewLabel.setIcon(new ImageIcon(Principal.class.getResource("/img/laptop.png")));
 		
@@ -127,7 +130,7 @@ public class Principal extends JFrame {
 		btnNewButton_1_1.setBounds(631, 59, 128, 128);
 		contentPane.add(btnNewButton_1_1);
 		
-		JButton btnUsuarios = new JButton("");
+		btnUsuarios = new JButton("");
 		btnUsuarios.setEnabled(false);
 		btnUsuarios.setContentAreaFilled(false);
 		btnUsuarios.setBorderPainted(false);
@@ -210,15 +213,20 @@ public class Principal extends JFrame {
 		btnNewButton_3_1_1.setToolTipText("Ajuda");
 		btnNewButton_3_1_1.setBounds(631, 267, 128, 128);
 		contentPane.add(btnNewButton_3_1_1);
-		panel.setBackground(SystemColor.desktop);
-		panel.setBounds(0, 497, 784, 64);
-		contentPane.add(panel);
-		panel.setLayout(null);
+		panelUsuario.setBackground(SystemColor.desktop);
+		panelUsuario.setBounds(0, 497, 784, 64);
+		contentPane.add(panelUsuario);
+		panelUsuario.setLayout(null);
 		
 		lblData = new JLabel("New label");
 		lblData.setBounds(478, 11, 306, 42);
 		lblData.setFont(new Font("Arial", Font.BOLD, 14));
 		lblData.setForeground(SystemColor.textHighlightText);
-		panel.add(lblData);
+		panelUsuario.add(lblData);
+		
+		lblUsuario = new JLabel("New label");
+		lblUsuario.setForeground(Color.WHITE);
+		lblUsuario.setBounds(21, 20, 136, 27);
+		panelUsuario.add(lblUsuario);
 	}
 }
