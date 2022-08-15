@@ -112,6 +112,8 @@ public class Login extends JFrame {
 		RestrictedTextField validarSenha = new RestrictedTextField(txtSenha);
 		validarSenha.setLimit(255);
 		
+		// Habilitar o enter no logar
+		getRootPane().setDefaultButton(btnEntrar);
 	}// Fim do construtor
 	
 		// Criação de um objeto para acessar a camada model
