@@ -13,7 +13,7 @@ import java.sql.DriverManager;
 public class DAO {
 	// Par�metros de conex�o
 	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://192.168.1.102:3306/infoRs ";
+	private String url = "jdbc:mysql://10.26.49.133:3306/infoRs ";
 	private String user = "root";
 	private String password = "123@senac";
 	
