@@ -5,31 +5,31 @@ import java.sql.DriverManager;
 
 /**
  * 
- * Classe modelo - Conexão com o banco
+ * Classe modelo - Conexï¿½o com o banco
  * 
  * @author renan.flazoti
  *
  */
 public class DAO {
-	// Parâmetros de conexão
+	// Parï¿½metros de conexï¿½o
 	private String driver = "com.mysql.cj.jdbc.Driver";
-	private String url = "jdbc:mysql://10.26.49.133:3306/infoRs ";
+	private String url = "jdbc:mysql://192.168.1.102:3306/infoRs ";
 	private String user = "root";
 	private String password = "123@senac";
 	
 	/**
-	 * Método responsável pela conexão
+	 * Mï¿½todo responsï¿½vel pela conexï¿½o
 	 * @return con / null
 	 */
 	
 	public Connection conectar() {
-		// objeto usado para conexão
+		// objeto usado para conexï¿½o
 		Connection con = null;
-		// tratamenmto de exceções
+		// tratamenmto de exceï¿½ï¿½es
 		try {
 			// uso do driver
 			Class.forName(driver);
-			// estabelecer a conexão
+			// estabelecer a conexï¿½o
 			con = DriverManager.getConnection(url, user, password);
 			return con;
 		} catch (Exception e) {
