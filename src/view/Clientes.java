@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import org.dom4j.Document;
 import org.dom4j.Element;
@@ -90,6 +91,8 @@ public class Clientes extends JDialog {
 		contentPanel.add(lblNewLabel);
 
 		txtCliId = new JTextField();
+		txtCliId.setEditable(false);
+		txtCliId.setEnabled(false);
 		txtCliId.setBounds(597, 22, 86, 20);
 		contentPanel.add(txtCliId);
 		txtCliId.setColumns(10);
@@ -182,6 +185,7 @@ public class Clientes extends JDialog {
 		txtCliCep.setColumns(10);
 
 		JButton btnCliBuscarCep = new JButton("Buscar CEP");
+		btnCliBuscarCep.setToolTipText("Buscar CEP");
 		btnCliBuscarCep.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// botao buscar cep
@@ -262,7 +266,7 @@ public class Clientes extends JDialog {
 			}
 		});
 		btnCliAlterar.setIcon(new ImageIcon(Clientes.class.getResource("/img/update.png")));
-		btnCliAlterar.setToolTipText("Adicionar");
+		btnCliAlterar.setToolTipText("Alterar");
 		btnCliAlterar.setContentAreaFilled(false);
 		btnCliAlterar.setBorderPainted(false);
 		btnCliAlterar.setBounds(358, 334, 64, 64);
@@ -277,21 +281,22 @@ public class Clientes extends JDialog {
 			}
 		});
 		btnCliExcluir.setIcon(new ImageIcon(Clientes.class.getResource("/img/cancelar.png")));
-		btnCliExcluir.setToolTipText("Adicionar");
+		btnCliExcluir.setToolTipText("Excluir");
 		btnCliExcluir.setContentAreaFilled(false);
 		btnCliExcluir.setBorderPainted(false);
 		btnCliExcluir.setBounds(432, 334, 64, 64);
 		contentPanel.add(btnCliExcluir);
 
-		btnBuscarId = new JButton("buscar ID");
-		btnBuscarId.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnBuscarId.addActionListener(new ActionListener() {
+		btnPesquisar = new JButton("buscar");
+		btnPesquisar.setToolTipText("Buscar");
+		btnPesquisar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				pesquisarClientes();
 			}
 		});
-		btnBuscarId.setBounds(693, 21, 89, 23);
-		contentPanel.add(btnBuscarId);
+		btnPesquisar.setBounds(369, 21, 89, 23);
+		contentPanel.add(btnPesquisar);
 
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(38, 55, 744, 74);
@@ -301,7 +306,9 @@ public class Clientes extends JDialog {
 		tblClientes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				limparCampos();
 				setarCaixasTexto();
+				limparCamposClientes();
 			}
 		});
 		scrollPane.setViewportView(tblClientes);
@@ -337,7 +344,7 @@ public class Clientes extends JDialog {
 				RestrictedTextField validarEmail = new RestrictedTextField(txtCliEmail);
 				validarEmail.setLimit(50);
 				// txtCliCEP
-				RestrictedTextField validarCEP = new RestrictedTextField(txtCliCPF);
+				RestrictedTextField validarCEP = new RestrictedTextField(txtCliCep);
 				validarCEP.setOnlyNums(true);
 				validarCEP.setLimit(10);
 				// txtCliEndereco
@@ -357,18 +364,20 @@ public class Clientes extends JDialog {
 				RestrictedTextField validarCidade = new RestrictedTextField(txtCliCidade);
 				validarCidade.setLimit(50);
 		
+				getRootPane().setDefaultButton(btnPesquisar);
+				
 	} // fim do costrutor
 
 	DAO dao = new DAO();
 	private JFormattedTextField txtCliData;
 	private JComboBox cboCliMkt;
 	private JComboBox cboCliUF;
-	private JButton btnBuscarId;
 	private JButton btnCliAdicionar;
 	private JButton btnCliAlterar;
 	private JButton btnCliExcluir;
 	private JTable tblClientes;
 	private JTextField txtPesquisarClientes;
+	private JButton btnPesquisar;
 
 	/**
 	 * Método responsável pela pesquisa avançada do cliente usando o nome e a
@@ -403,6 +412,7 @@ public class Clientes extends JDialog {
 		int setar = tblClientes.getSelectedRow();
 		txtCliId.setText(tblClientes.getModel().getValueAt(setar, 0).toString());
 		txtCliNome.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
+		txtPesquisarClientes.setText(tblClientes.getModel().getValueAt(setar, 1).toString());
 		txtCliFone.setText(tblClientes.getModel().getValueAt(setar, 2).toString());
 		txtCliCPF.setText(tblClientes.getModel().getValueAt(setar, 3).toString());
 
@@ -414,22 +424,21 @@ public class Clientes extends JDialog {
 	 */
 
 	private void pesquisarClientes() {
-		if (txtCliId.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Digite o ID do cliente");
-			txtCliId.requestFocus();
+		if (txtPesquisarClientes.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Digite o nome do cliente");
+			txtPesquisarClientes.requestFocus();
 		} else {
 			// lógica principal
 			// query principal ( Instrução SQL)
-			String read = "select * from clientes where idCli = ?";
+			String read = "select * from clientes where nome = ?";
 			// tratar excessões sempre que lidar com o banco
 			try {
 				// estabelecer a conexão
 				Connection con = dao.conectar();
 				// Preparar a execução da Query
 				PreparedStatement pst = con.prepareStatement(read);
-				// Setar o argumento (id)
 				// Substituir o ? pelo conteúdo da caixa de texto
-				pst.setString(1, txtCliId.getText());
+				pst.setString(1, txtPesquisarClientes.getText());
 				// Executar a query e exibir o resultado no formulário
 				ResultSet rs = pst.executeQuery();
 				// Validação (existência de clientes)
@@ -455,7 +464,7 @@ public class Clientes extends JDialog {
 					btnCliAlterar.setEnabled(true);
 					btnCliExcluir.setEnabled(true);
 				} else {
-					JOptionPane.showMessageDialog(null, "Clientes não cadastrado");
+					JOptionPane.showMessageDialog(null, "Cliente não cadastrado");
 					limparCampos();
 					btnCliAdicionar.setEnabled(true);
 				}
@@ -473,7 +482,7 @@ public class Clientes extends JDialog {
 	private void adicionarClientes() {
 
 		if (txtCliNome.getText().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Informe o nome");
+			JOptionPane.showMessageDialog(null, "Informe o nome do cliente");
 			txtCliNome.requestFocus();
 		} else if (txtCliData.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Informe a data de nascimento do cliente");
@@ -511,10 +520,11 @@ public class Clientes extends JDialog {
 				pst.setString(13, cboCliUF.getSelectedItem().toString());
 				// Executar a query e inserir o cliente no banco
 				pst.executeUpdate();
-				// limpar campos
-				limparCampos();
 				// confirmação
 				JOptionPane.showMessageDialog(null, "Cliente adicionado com sucesso");
+				// limpar campos
+				limparCampos();
+				limparCamposClientes();
 				// Encerrar a conexão
 				con.close();
 			} catch (SQLIntegrityConstraintViolationException ex) {
@@ -574,8 +584,9 @@ public class Clientes extends JDialog {
 				// Executar a query e alterar o cliente no banco
 				pst.executeUpdate();
 				// confirmação
-				limparCampos();
 				JOptionPane.showMessageDialog(null, "Cliente alterado com sucesso");
+				limparCampos();
+				limparCamposClientes();
 				// Encerrar a conexão
 				con.close();
 			} catch (SQLIntegrityConstraintViolationException ex) {
@@ -608,8 +619,9 @@ public class Clientes extends JDialog {
 				// Executar a query e excluir o cliente do banco
 				pst.executeUpdate();
 				// confirmação
-				limparCampos();
 				JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso");
+				limparCampos();
+				limparCamposClientes();
 				// Encerrar a conexão
 				con.close();
 			} catch (Exception e) {
@@ -664,6 +676,16 @@ public class Clientes extends JDialog {
 			System.out.println(e);
 		}
 	}
+	
+	/**
+	 * Método responsável por limpar a tabela ao setar os campos
+	 * na tabela
+	 */
+	
+	private void limparCamposClientes() {
+		// limpar tabela
+		((DefaultTableModel) tblClientes.getModel()).setRowCount(0);
+	}
 
 	/**
 	 * Método responsavel por Limpar campos
@@ -687,5 +709,7 @@ public class Clientes extends JDialog {
 		btnCliAdicionar.setEnabled(false);
 		btnCliAlterar.setEnabled(false);
 		btnCliExcluir.setEnabled(false);
+		txtPesquisarClientes.setText(null);
+		
 	}
 }
