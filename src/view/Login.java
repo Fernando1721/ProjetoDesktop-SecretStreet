@@ -102,8 +102,8 @@ public class Login extends JFrame {
 		contentPane.add(btnEntrar);
 		
 		lblStatus = new JLabel("");
-		lblStatus.setIcon(new ImageIcon(Login.class.getResource("/img/databaseoff.png")));
-		lblStatus.setBounds(360, 211, 64, 64);
+		lblStatus.setIcon(new ImageIcon(Login.class.getResource("/img/bddoff.png")));
+		lblStatus.setBounds(360, 211, 54, 64);
 		contentPane.add(lblStatus);
 		
 		RestrictedTextField validarLogin = new RestrictedTextField(txtLogin);
